@@ -103,7 +103,7 @@ fn remove_goal(app_handle: AppHandle, id: &str) {
 }
 
 #[tauri::command]
-fn set_daily_points(app_handle: AppHandle, date: i64, pointsCompleted: i64) {
+fn set_daily_points(app_handle: AppHandle, date: String, pointsCompleted: i64) {
     app_handle.db(|db| {
         let statement = db.prepare("INSERT OR REPLACE INTO progressPerDay VALUES (@date, @pointsCompleted)");
         let _ = statement.expect("REASON").execute(named_params! {"@date": date, "@pointsCompleted": pointsCompleted});

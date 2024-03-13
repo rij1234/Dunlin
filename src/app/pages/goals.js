@@ -11,7 +11,7 @@ import { FaInfoCircle } from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
 
 import { FaCheck, FaTrashAlt, FaPlus, FaMinus} from "react-icons/fa";
-import { FaCirclePlus } from "react-icons/fa6";
+import { FaCirclePlus,  } from "react-icons/fa6";
 
 
 function createGoal({updateGoals, close, longTermGoal, onePointrequirement, twoPointRequirement, threePointRequirement}){
@@ -44,10 +44,23 @@ function setPoints(updateGoals, id, newPointTotal) {
 
 function updateGoalTotal(d){
     let today = new Date();
-    today.setHours(0, 0, 0, 0);
     let sumOfPointsCompletedToday = 0;
-    d.forEach(i => {sumOfPointsCompletedToday += i.pointsCompletedToday})
-    invoke('set_daily_points', {date: today.getTime(), pointsCompleted: sumOfPointsCompletedToday})
+    d.forEach(i => {
+
+      const lastCompleted = new Date(i.lastCompleted);
+      const today = new Date();
+
+      if (
+        lastCompleted.getFullYear() !== today.getFullYear() ||
+        lastCompleted.getMonth() !== today.getMonth() ||
+        lastCompleted.getDate() !== today.getDate()
+      ) {
+        i.pointsCompletedToday = 0;
+      }
+
+      sumOfPointsCompletedToday += i.pointsCompletedToday
+    })
+    invoke('set_daily_points', {date: `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`, pointsCompleted: sumOfPointsCompletedToday})
 }
 
 function getGoals(){
@@ -161,7 +174,7 @@ export default function Goals({setPage}) {
                 />
                 <Divider className="my-2" />
                 <Input
-                  label="One Point Requirement"
+                  label="Daily One Point Requirement"
                   placeholder="..."
                   variant="bordered"
                   value={onePointRequirement}
@@ -169,14 +182,14 @@ export default function Goals({setPage}) {
                 />
 
                 <Input
-                  label="Two Point Requirement"
+                  label="Daily Two Point Requirement"
                   placeholder="..."
                   variant="bordered"
                   value={twoPointRequirement}
                   onChange={e => setTwoPointrequirement(e.target.value)}
                 />
                 <Input
-                  label="Three Point Requirement"
+                  label="Daily Three Point Requirement"
                   placeholder="..."
                   variant="bordered"
                   value={threePointRequirement}
@@ -184,6 +197,22 @@ export default function Goals({setPage}) {
                 />
               </ModalBody>
               <ModalFooter>
+                <Tooltip
+                    delay={0}
+                    closeDelay={0}
+                    placement="left"
+                    content={
+                      <div className="px-1 py-2">
+                        <div className="text-small">Points refresh daily. </div>
+                        <div className="text-small">These should be something you can do every day and should be incremental. </div>
+                        <div className="text-tiny">ex. Read 15 mins, Read 30 mins, Read 45 mins</div>
+                      </div>
+                    }
+                  >
+                  <Button color="warning" variant="bordered" isIconOnly>
+                    <FaInfoCircle />
+                  </Button>
+                </Tooltip>
                 <Button color="warning" onPress={() => {setOnePointrequirement(""); setTwoPointrequirement(""); setThreePointrequirement(""); setLongTermGoal(""); createGoal({updateGoals: setGoals, close: onClose, longTermGoal:longTermGoal, onePointrequirement: onePointRequirement, twoPointRequirement: twoPointRequirement, threePointRequirement: threePointRequirement})}}>
                   Create
                 </Button>

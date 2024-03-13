@@ -18,18 +18,18 @@ pub fn initialize_database(app_handle: &AppHandle) -> Result<Connection, rusqlit
     let mut db = Connection::open(sqlite_path)?;
     let tx = db.transaction()?;
     tx.execute_batch(
-      "CREATE TABLE IF NOT EXISTS todos (id STRING, finished INTEGER, task STRING, date INTEGER);
+      "CREATE TABLE IF NOT EXISTS todos (id TEXT, finished INTEGER, task TEXT, date INTEGER);
       CREATE TABLE IF NOT EXISTS goals (
-          id STRING,
-          goal STRING,
-          onePointRequirement STRING,
-          twoPointRequirement STRING,
-          threePointRequirement STRING,
+          id TEXT,
+          goal TEXT,
+          onePointRequirement TEXT,
+          twoPointRequirement TEXT,
+          threePointRequirement TEXT,
           pointsCompletedToday INTEGER,
           lastCompleted INTEGER
       );
       CREATE TABLE IF NOT EXISTS progressPerDay (
-            date INTEGER UNIQUE,
+            date TEXT UNIQUE,
             pointsCompleted INTEGER
         );"
     )?;
@@ -102,7 +102,7 @@ pub fn _get_goals(db: &Connection) -> Result<Vec<Goal>, rusqlite::Error> {
 
 #[derive(Serialize)]
 pub struct Day {
-  date: i64,
+  date: String,
   pointsCompleted: i64
 }
 

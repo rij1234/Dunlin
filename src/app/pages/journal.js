@@ -8,12 +8,11 @@ import { invoke } from '@tauri-apps/api/tauri'
 
 export default function Journal({setPage}) {
 
-  const [greeting, setGreeting] = useState();
+  const [currentDay, setCurrentDay] = useState( new Date() );
+
+
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between m-24">
-    <text>Journal Page</text>
-
-    </main>
+    <div></div>
   );
 }

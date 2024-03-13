@@ -7,8 +7,8 @@
     "distDir": "../out"
   },
   "package": {
-    "productName": "dunlintauri",
-    "version": "0.7.3"
+    "productName": "Dunlin",
+    "version": "0.7.4"
   },
   "tauri": {
     "allowlist": {
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "dunlintauri",
+        "title": "Dunlin",
         "width": 800
       }
     ]
