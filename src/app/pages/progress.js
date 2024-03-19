@@ -19,12 +19,12 @@ export default function Progress({setPage}) {
 
   useEffect(() => {invoke("get_days").then(setDays)}, [])
 
+  // Get Bar Graph Data
   const datesToGet = [6,5,4,3,2,1,0].map(n =>
     {
       const d = new Date();
       d.setHours(0, 0, 0, 0);
       d.setDate(today.getDate() - n);
-      // console.log(d.getTime())
       return d;
     }
   )
@@ -53,25 +53,49 @@ export default function Progress({setPage}) {
     }
   );
 
+  // Calculate weekly average
   const average = array => array.reduce((a, b) => a + b) / array.length;
   let weeklyAverage = average(dataInWeeklyChart);
 
   let chartData = [];
 
   for(let i = 0; i < thisWeeksDates.length; i++) {
-    chartData.push({day: thisWeeksDates[i], points: dataInWeeklyChart[i]})
+    chartData.push({
+      day: datesToGet[i].getDay() !== (new Date().getDay()) ? weekday[datesToGet[i].getDay()] : "Today",
+      points: dataInWeeklyChart[i]
+    })
   }
 
-  console.log(chartData)
-
-
+  // get heatmap data
   let dataInHeatmap = [];
 
-  dataInHeatmap = days.map(d => {
-    return {date: `${d.date.split("/")[2]}/${d.date.split("/")[1]}/${d.date.split("/")[0]}`, count: d.pointsCompleted};
-  })
+  Date.prototype.addDays = function(days) {
+      var date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+  }
 
-  console.log(days)
+  function getDates(startDate, stopDate) {
+      var dateArray = new Array();
+      var currentDate = startDate;
+      while (currentDate <= stopDate) {
+          dateArray.push(new Date (currentDate));
+          currentDate = currentDate.addDays(1);
+      }
+      return dateArray;
+  }
+
+  let heatmapDatesToGet = getDates(new Date(`${new Date().getFullYear() - 1}/12/31`), new Date(`${new Date().getFullYear()}/12/31`))
+
+  let maxHeatmapVal = 1;
+
+  dataInHeatmap = heatmapDatesToGet.map(date => {
+    let e = days.find(d => {
+      return d.date.split("/")[2] == date.getFullYear() && d.date.split("/")[1] == date.getMonth() && d.date.split("/")[0] == date.getDate()
+    })
+    if(e !== undefined && e.pointsCompleted > maxHeatmapVal) maxHeatmapVal = e.pointsCompleted
+    return {date: date, count: (e !== undefined ? e.pointsCompleted : 0)}
+  })
 
 
 
@@ -101,9 +125,17 @@ export default function Progress({setPage}) {
 
 
       <div className="pt-8 pb-2">Year At A Glance</div>
+      <div className="text-tiny">{new Date().getFullYear()}</div>
       <div>
         <HeatMap
           width={720}
+          panelColors={{
+            1: '#DADCDF',
+            [Math.round((((1 + maxHeatmapVal + 1) / 2) + 1)/2)]: '#C6E48B',
+            [Math.round((1 + maxHeatmapVal + 1) / 2)]: '#7BC96F',
+            [Math.round((((1 + maxHeatmapVal + 1) / 2) + maxHeatmapVal + 1) / 2)]: '#239A3B',
+            [Math.round(maxHeatmapVal + 1)]: '#196127',
+          }}
           value={dataInHeatmap}
           startDate={new Date(`${new Date().getFullYear()}/01/01`)}
           endDate={new Date(`${new Date().getFullYear()}/12/31`)}
