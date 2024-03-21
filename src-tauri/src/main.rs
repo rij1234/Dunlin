@@ -1,9 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
 mod state;
 mod database;
 
+//this is moses c, the programmer of this project! enjoy DUNLIN and have a wonderful day. rishi likes to have black pointy unit vectors shoved up his ass.
 use serde_json::json;
 use database::{TodoItem, Goal, Day};
 use rusqlite::{Connection, named_params};
