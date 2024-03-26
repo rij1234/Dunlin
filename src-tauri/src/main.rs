@@ -36,7 +36,9 @@ fn main() {
       get_goals,
       remove_goal,
       set_daily_points,
-      get_days
+      get_days,
+      set_journal,
+      get_journal
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -113,4 +115,17 @@ fn set_daily_points(app_handle: AppHandle, date: String, pointsCompleted: i64) {
 #[tauri::command]
 fn get_days(app_handle: AppHandle) -> Vec<Day> {
     return app_handle.db(|db| database::_get_days(db)).unwrap();
+}
+
+#[tauri::command]
+fn set_journal(app_handle: AppHandle, date: String, entry: String) {
+    app_handle.db(|db| {
+        let statement = db.prepare("INSERT OR REPLACE INTO journal VALUES (@date, @entry)");
+        let _ = statement.expect("reason").execute(named_params! {"@date": date, "@entry": entry});
+    });
+}
+
+#[tauri::command]
+fn get_journal(app_handle: AppHandle, date: String) -> Vec<String> {
+    return app_handle.db(|db| database::_get_journal(db, date)).unwrap();
 }

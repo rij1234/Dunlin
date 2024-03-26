@@ -63,11 +63,11 @@ return (
          Progress
        </Link>
      </NavbarItem>
-     {/*<NavbarItem>
+     <NavbarItem>
        <Link color="foreground" className={getStyleComponent(currentPage, "Journal")} href="#" onClick={() => setPage("Journal")}>
          Journal
        </Link>
-     </NavbarItem>*/}
+     </NavbarItem>
    </NavbarContent>
    <NavbarContent justify="end">
      <NavbarItem className="lg:flex">

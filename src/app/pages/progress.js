@@ -146,7 +146,7 @@ export default function Progress({setPage}) {
                 closeDelay={0}
                 content={
                   <div className="px-1 py-2">
-                    <div className="text-small font-bold">{new Date(data.date).toLocaleDateString('en-us', {year:"numeric", month:"short", day:"numeric"})}</div>
+                    <div className="text-small font-bold">{new Date(data.date).toLocaleDateString(undefined, {year:"numeric", month:"short", day:"numeric"})}</div>
                     <div className="text-tiny">Points: {data.count !== undefined ? data.count : 0}</div>
                   </div>
                 }>

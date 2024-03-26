@@ -3,11 +3,12 @@ Dunlin is a free goalsetting and planning app.
 It includes a main goals page that helps you split your large, long-term goals into daily requirements.
 These are tracked through a point system, which can be viewed in the progress tab.
 Dunlin also includes a todo list for any other tasks.
-It will soon include a journaling and scheduling feature. 
+It will soon include a journaling and scheduling feature.
 
 
 # For Contributors
 This is a [Tauri](https://tauri.app/) and [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Contributors will need to first install all of Tauri's [prerequisite softwares](https://tauri.app/v1/guides/getting-started/prerequisites/) as well as the prerequisites for nodejs and rust.
 
 ## Getting Started
 

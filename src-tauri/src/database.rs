@@ -31,7 +31,14 @@ pub fn initialize_database(app_handle: &AppHandle) -> Result<Connection, rusqlit
       CREATE TABLE IF NOT EXISTS progressPerDay (
             date TEXT UNIQUE,
             pointsCompleted INTEGER
-        );"
+        );
+
+        CREATE TABLE IF NOT EXISTS journal (
+            date TEXT UNIQUE,
+            entry TEXT
+        )
+
+        "
     )?;
 
     tx.commit()?;
@@ -118,5 +125,17 @@ pub fn _get_days(db: &Connection) -> Result<Vec<Day>, rusqlite::Error> {
         items.push(dat);
     }
 
+    Ok(items)
+}
+
+pub fn _get_journal(db: &Connection, date: String) -> Result<Vec<String>, rusqlite::Error> {
+    let mut statement = db.prepare(&format!("SELECT * FROM journal WHERE date = '{date}'", date = date.as_str()).to_string())?;
+    let mut rows = statement.query([])?;
+    let mut items = Vec::new();
+    while let Some(row) = rows.next()? {
+        let entry = row.get("entry")?;
+        items.push(entry);
+    }
+    
     Ok(items)
 }
