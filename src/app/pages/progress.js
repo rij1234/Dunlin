@@ -91,7 +91,7 @@ export default function Progress({setPage}) {
 
   dataInHeatmap = heatmapDatesToGet.map(date => {
     let e = days.find(d => {
-      return d.date.split("/")[2] == date.getFullYear() && d.date.split("/")[1] == date.getMonth() && d.date.split("/")[0] == date.getDate()
+      return d.date.split("/")[2] == date.getFullYear() && d.date.split("/")[1] == date.getMonth() + 1 && d.date.split("/")[0] == date.getDate()
     })
     if(e !== undefined && e.pointsCompleted > maxHeatmapVal) maxHeatmapVal = e.pointsCompleted
     return {date: date, count: (e !== undefined ? e.pointsCompleted : 0)}
